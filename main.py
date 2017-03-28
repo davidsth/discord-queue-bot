@@ -1,6 +1,7 @@
 import discord
 from discord.ext import commands
 import random
+import configparser
 
 
 bot = commands.Bot(command_prefix='>', description="")
@@ -25,7 +26,7 @@ async def r(ctx):
 	>r to remove yourself
 	>r [n] where [n] is the number to remove others"""
 	rem = ctx.message.content.split(" ")
-	print("rem:" + str(rem))
+
 	if len(rem) == 2:
 		index = int(rem[1])
 		if index > 0 and index <= len(queue):
@@ -34,7 +35,7 @@ async def r(ctx):
 		else:
 			msg = "Invalid number"
 	else:
-		print("remove:" + ctx.message.content)
+
 		member = ctx.message.author.name
 		queue.remove(member)
 		msg = "Removed\n" + stringify_queue()
@@ -45,13 +46,13 @@ async def r(ctx):
 async def q(ctx):
 	"""Add yourself to the queue"""
 	member = ctx.message.author
-	print(ctx.message.author)
+
 	msg = ""
 	if member.name in queue:
 		msg = "You're already in the queue"
 	else:
 		queue.append(member.name)
-		print(queue)
+
 		msg = "Added {0} to queue".format(member.name)
 	await bot.say(msg)
 
@@ -66,14 +67,7 @@ def stringify_queue():
 	s += "------------------------------------------------------"
 	return s
 
-
-# @bot.event
-# async def on_message(message):
-# 	# we do not want the bot to reply to itself
-# 	if message.author == bot.user:
-# 		return
-
-# 	if message.content.startswith('>q'):
-		
-
-bot.run('Mjk2MzY5Mjg2OTA4MzQ2MzY4.C7xO6g.wLFy-zgaGMSurPWgI6GhgTqObts')
+config = configparser.ConfigParser()
+config.read('secrets.cfg')
+token = config['DEFAULT']['token']
+bot.run(token)
